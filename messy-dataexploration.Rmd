@@ -1,0 +1,95 @@
+---
+title: "exercise_set_1"
+output:
+  html_document: default
+  pdf_document: default
+date: "2025-02-13"
+---
+
+# the following exercises are a test in disguise. 
+# can you think of any improvements to the following code?
+# go through the exercises and answer them while fixing issues and improving on code workflow
+# make a Rmarkdown (or Quarto) version of this document with your responses 
+# render the document in PDF and HTML formats
+
+```{r}
+rm(list=ls()) 
+ 
+library(tidyverse)
+library(ggplot2)
+```
+
+## PROBLEM 1 ##
+```{r}
+anscombe_quartet = readRDS("anscombe quartet.rds")
+
+str(anscombe_quartet)
+```
+
+# let's check some summary statistics:
+```{r}
+anscombe_quartet %>% 
+  group_by(dataset) %>% 
+  summarise(
+    mean_x    = mean(x),
+    mean_y    = mean(y),
+    min_x     = min(x),
+    min_y     = min(y),
+    max_x     = max(x),
+    max_y     = max(y),
+    crrltn    = cor(x, y)
+  )
+```
+
+# let's plot the data with ggplot:
+```{r}
+ggplot(anscombe_quartet, aes(x=x,y=y)) +
+  geom_point() + 
+  geom_smooth(method = "lm",formula = "y ~ x") +
+  facet_wrap(~dataset)
+
+ggsave('plot_1.jpg', width = 5, height = 5, units = "in", dpi = 300)
+```
+# Dataset 1: A typical linear relationship with moderate variability.
+# Dataset 2: Also linear but with slightly more spread.
+# Dataset 3: Mostly linear, but one outlier affects the trend.
+# Dataset 4: A vertical cluster of points except for one, artificially maintaining the regression line.
+
+# Linear regression appears appropriate for Dataset 1 and Dataset 2, where the relationship between x and y is consistently linear with moderate spread. For Dataset 3, an outlier significantly influences the regression line, making linear regression misleading. For Dataset 4, the data is mostly vertical except for one influential point, making the regression unreliable.
+
+# While summary statistics (e.g., mean, variance, correlation) might suggest similar relationships across all datasets, the scatter plots reveal crucial differences. This highlights the importance of visualising data rather than relying solely on numerical summaries before applying regression models.
+
+
+## PROBLEM 2 ##
+```{r}
+datasaurus_dozen = readRDS("datasaurus_dozen.rds")
+
+str(datasaurus_dozen)
+```
+
+# let's check some summary statistics:
+```{r}
+datasaurus_dozen %>% 
+  group_by(dataset) %>% 
+  summarise(
+    mean_x    = mean(x),
+    mean_y    = mean(y),
+    min_x     = min(x),
+    min_y     = min(y),
+    max_x     = max(x),
+    max_y     = max(y),
+    crrltn    = cor(x, y)
+  )
+```
+
+# let's plot the data with ggplot:
+```{r}
+ggplot(datasaurus_dozen, aes(x=x,y=y)) +
+  geom_point() + 
+  geom_smooth(method = "lm",formula = "y ~ x") +
+  facet_wrap(~dataset)
+
+ggsave('plot_2.jpg', width = 5, height = 5, units = "in", dpi = 300)
+```
+
+
